@@ -1,0 +1,9 @@
+[package]
+name = "pig_generic_type"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+my_library = { package="my_library_generic_type", path = "../my_library" }
+bevy = {  workspace = true }
+bevy_egui = {  workspace = true }

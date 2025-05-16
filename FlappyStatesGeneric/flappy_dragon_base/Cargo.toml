@@ -1,0 +1,8 @@
+[package]
+name = "flappy_dragon_base_state_generic"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = {  workspace = true }
+my_library_flappy_state_generic = { path = "../my_library" }

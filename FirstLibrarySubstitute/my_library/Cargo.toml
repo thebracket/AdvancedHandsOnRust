@@ -1,0 +1,27 @@
+[package]
+name = "my_library_substitute"
+version = "0.1.0"
+edition = "2021"
+
+# START: dependencies
+[dependencies]
+rand = {  workspace = true }
+# START_HIGHLIGHT
+rand_pcg = { workspace = true, optional = true }
+rand_xorshift = { workspace = true, optional = true }
+# END_HIGHLIGHT
+# END: dependencies
+
+# START: features
+[features]
+default = [ "pcg" ]
+pcg = [ "rand_pcg" ]
+xorshift = [ "rand_xorshift" ]
+# END: features
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "random"
+harness = false

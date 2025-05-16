@@ -1,0 +1,68 @@
+[package]
+name = "more_hands_on_rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[workspace]
+members = [
+    "BootstrapRust/hello_world",
+    "BootstrapBevy/blank_window",
+    "BootstrapBevy/moving_dragon",
+    "FirstLibraryCreate/default_lib",
+    "FirstLibraryCreate/pig",
+    "FirstLibraryCreate/my_library",
+    "FirstLibraryGenericType/my_library",
+    "FirstLibraryGenericType/pig",
+    "FirstLibraryGenericRange/my_library",
+    "FirstLibraryGenericRange/pig",
+    "FirstLibraryBenchmark/my_library",
+    "FirstLibrarySubstitute/my_library",
+    "FirstLibraryMutableRandom/my_library",
+    "FirstLibraryMutableRandomPlugin/pig",
+    "FirstLibraryMutableRandomPlugin/my_library",
+    "FirstLibrarySharedRandom/my_library",
+    "FirstLibraryDocs/my_library",
+    "FlappyIntro/flappy_dragon_base",
+    "FlappyStatesGeneric/flappy_dragon_base",
+    "FlappyStatesGeneric/my_library",
+    "FlappyStatesMenu/flappy_dragon_base",
+    "FlappyStatesMenu/my_library",
+    "FlappyStatesMacro/flappy_dragon_base",
+    "FlappyStatesMacro/my_library",
+    "FlappyStatesMacro/pig",
+    "FlappyAssets/flappy_dragon_base",
+    "FlappyAssets/my_library",
+    "FlappyAssetsLoadingMenu/flappy_dragon_base",
+    "FlappyAssetsLoadingMenu/my_library",
+    "FlappyAnimation/flappy_dragon_base",
+    "FlappyAnimation/my_library",
+    "FlappyPhysics/flappy_dragon_base",
+    "FlappyPhysics/my_library",
+    "FlappyCollision/flappy_dragon_base",
+    "FlappyCollision/my_library",
+    "FlappyCollision/bouncy",
+    "FlappyCollision/bouncy_bbox",
+    "FlappyCollision/bouncy_bbox_quadtree",
+    "FlappyWrap/flappy_dragon_base",
+    "FlappyWrap/my_library",
+    "MarsBaseOneSkeleton/mars_base_zero",
+    "MarsBaseOneSkeleton/mars_base_one",
+    "MarsBaseOneSkeleton/my_library",
+    "MarsBaseOneWorldBuilder/mars_base_one",
+    "MarsBaseOneWorldBuilder/mars_base_one_threaded",
+    "MarsBaseOneOptimize/mars_base_one",
+    "MarsBaseOneOptimize/mars_base_one_collision",
+    "MarsElements/mars_base_one",
+    "MarsScore/mars_base_one",
+    "MarsScore/highscore_server",
+]
+
+[workspace.dependencies]
+bevy = "0.16.0"
+bevy_egui = "0.34.1"
+anyhow = "1"
+rand = "0.8"
+rand_pcg = { version = "0.3" }
+rand_xorshift = { version = "0.3" }

@@ -1,0 +1,9 @@
+[package]
+name = "new_workspace"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[workspace]
+members = [ "hello_world" ]

@@ -1,0 +1,9 @@
+[package]
+name = "pig_flappy_macro"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+my_library = { package="my_library_flappy_state_macro", path = "../my_library" }
+bevy = {  workspace = true }
+bevy_egui = {  workspace = true }

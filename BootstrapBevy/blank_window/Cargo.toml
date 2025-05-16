@@ -1,0 +1,9 @@
+[package]
+name = "blank_window"
+version = "0.1.0"
+edition = "2021"
+
+#START: hello_bevy_deps
+[dependencies]
+bevy = {  workspace = true }
+#END: hello_bevy_deps

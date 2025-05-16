@@ -1,0 +1,8 @@
+[package]
+name = "mars_base_one_threaded"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = {  workspace = true }
+my_library = { package="my_library_mbone_skeleton", path = "../../MarsBaseOneSkeleton/my_library" }

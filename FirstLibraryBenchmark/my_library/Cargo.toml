@@ -1,0 +1,18 @@
+[package]
+name = "my_library_benchmark"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rand = {  workspace = true }
+
+# START: dev-deps
+[dev-dependencies]
+criterion = { version = "0.5.1", features = [ "html_reports"] }
+# END: dev-deps
+
+# START: bench
+[[bench]]
+name = "random"
+harness = false
+# END: bench
