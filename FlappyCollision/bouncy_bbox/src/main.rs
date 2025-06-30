@@ -1,5 +1,6 @@
 use bevy::{prelude::*, diagnostic::{FrameTimeDiagnosticsPlugin, DiagnosticsStore}};
 use my_library_flappy_collision::{*, egui::egui::Color32};
+use my_library_flappy_collision::egui::EguiPrimaryContextPass;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, Hash, Default, States)]
 pub enum GamePhase {
@@ -74,7 +75,7 @@ fn main() -> anyhow::Result<()> {
   let mut app = App::new();
   add_phase!(app, GamePhase, GamePhase::Bouncing,
     start => [ setup ],
-    run => [ warp_at_edge, collisions, show_performance,
+    run => [ warp_at_edge, collisions,
       continual_parallax, physics_clock, sum_impulses, apply_velocity ],
     exit => [ cleanup::<BouncyElement> ]
   );
@@ -102,6 +103,7 @@ fn main() -> anyhow::Result<()> {
       .add_plugins(
         AssetManager::new().add_image("green_ball", "green_ball.png")?,
       )
+      .add_systems(EguiPrimaryContextPass, show_performance.run_if(in_state(GamePhase::Bouncing)))
       .run();
 
   Ok(())
@@ -178,14 +180,14 @@ fn show_performance(
   assets: Res<AssetStore>,
   query: Query<&Transform, With<Ball>>,
   loaded_assets: Res<LoadedAssets>,
-) {
+) -> Result {
   let n_balls = query.iter().count();
   let fps = diagnostics
     .get(&FrameTimeDiagnosticsPlugin::FPS)
     .and_then(|fps| fps.average())
     .unwrap();
   egui::egui::Window::new("Performance").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       let fps_text = format!("FPS: {fps:.1}");
       let color = match fps as u32 {
@@ -211,6 +213,7 @@ fn show_performance(
       }
     },
   );
+  Ok(())
 }
 
 fn bounce_on_collision(

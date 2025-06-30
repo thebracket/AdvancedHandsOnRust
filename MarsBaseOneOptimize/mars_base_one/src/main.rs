@@ -27,14 +27,13 @@ fn main() -> anyhow::Result<()> {
   let mut app = App::new();
   add_phase!(app, GamePhase, GamePhase::WorldBuilding,
     start => [ spawn_builder ],
-    run => [ show_builder ],
+    run => [ ],
     exit => [ ]
   );
   add_phase!(app, GamePhase, GamePhase::Playing,
     start => [ setup ],
     run => [ movement, end_game, physics_clock, sum_impulses, apply_gravity, apply_velocity,
-      terminal_velocity, check_collisions::<Player, Ground>, bounce, camera_follow,
-      show_performance],
+      terminal_velocity, check_collisions::<Player, Ground>, bounce, camera_follow],
     exit => [ cleanup::<GameElement> ]
   );
 
@@ -64,6 +63,8 @@ fn main() -> anyhow::Result<()> {
       )
       .insert_resource(Animations::new())
       .add_event::<OnCollision<Player, Ground>>()
+      .add_systems(EguiPrimaryContextPass, show_builder.run_if(in_state(GamePhase::WorldBuilding)))
+      .add_systems(EguiPrimaryContextPass, show_performance.run_if(in_state(GamePhase::Playing)))
       .run();
 
   Ok(())
@@ -73,6 +74,7 @@ static WORLD_READY: AtomicBool = AtomicBool::new(false);
 use std::sync::Mutex;
 use bevy::asset::RenderAssetUsages;
 use bevy::render::camera::ScalingMode;
+use my_library::egui::EguiPrimaryContextPass;
 
 static NEW_WORLD: Mutex<Option<World>> = Mutex::new(None);
 
@@ -102,9 +104,9 @@ fn spawn_builder() {
 fn show_builder(
   mut state: ResMut<NextState<GamePhase>>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   egui::egui::Window::new("Performance").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       ui.label("Building World");
     });
@@ -112,6 +114,7 @@ fn show_builder(
   if WORLD_READY.load(std::sync::atomic::Ordering::Relaxed) {
     state.set(GamePhase::Playing);
   }
+  Ok(())
 }
 //END: WorldBuildingDone
 
@@ -468,13 +471,13 @@ impl World {
 fn show_performance(
   diagnostics: Res<DiagnosticsStore>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   let fps = diagnostics
       .get(&FrameTimeDiagnosticsPlugin::FPS)
       .and_then(|fps| fps.average())
       .unwrap_or(0.0);
   egui::egui::Window::new("Performance").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       let fps_text = format!("FPS: {fps:.1}");
       let color = match fps as u32 {
@@ -484,5 +487,6 @@ fn show_performance(
       };
       ui.colored_label(color, &fps_text);
     });
+  Ok(())
 }
 //END: ShowFPS

@@ -2,6 +2,7 @@ mod bevy_animation;
 pub use bevy_animation::*;
 use bevy::prelude::*;
 use bevy::state::state::FreelyMutableState;
+use bevy_egui::EguiPrimaryContextPass;
 
 mod game_menus;
 
@@ -30,7 +31,7 @@ where
   fn build(&self, app: &mut App) {
     app.init_state::<T>();    
     //START_HIGHLIGHT
-    app.add_plugins(bevy_egui::EguiPlugin{ enable_multipass_for_primary_context: false });
+    app.add_plugins(bevy_egui::EguiPlugin::default());
     //END_HIGHLIGHT
     let start = MenuResource {
       menu_state: self.menu_state,
@@ -49,7 +50,7 @@ where
     app.add_systems(OnExit(self.game_end_state), cleanup::<game_menus::MenuElement>);
 
     app.add_systems(OnEnter(T::default()), crate::bevy_assets::setup);
-    app.add_systems(Update, crate::bevy_assets::run::<T>.run_if(in_state(T::default())));
+    app.add_systems(EguiPrimaryContextPass, crate::bevy_assets::run::<T>.run_if(in_state(T::default())));
     app.add_systems(OnExit(T::default()), crate::bevy_assets::exit);
   }
 }

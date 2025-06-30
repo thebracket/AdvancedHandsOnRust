@@ -1,6 +1,6 @@
 //START: main
 use bevy::prelude::*;
-use bevy_egui::{egui, EguiPlugin, EguiContexts};
+use bevy_egui::{egui, EguiPlugin, EguiContexts, EguiPrimaryContextPass};
 use my_library::RandomNumberGenerator; //<callout id="first_library_create.pig.use" /> //<callout id="first_library_create.pig.egui" />
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug, Hash, States, Default)] //<callout id="first_library_create.pig.state" />
@@ -13,11 +13,11 @@ enum GamePhase {
 fn main() {
   App::new()
   .add_plugins(DefaultPlugins)
-  .add_plugins(EguiPlugin{ enable_multipass_for_primary_context: false })
+  .add_plugins(EguiPlugin::default())
   .add_systems(Startup, setup) //<callout id="first_library_create.pig.call_setup" />
   .init_state::<GamePhase>() //<callout id="first_library_create.pig.setup_state" />
-  .add_systems(Update, display_score) //<callout id="first_library_create.pig.call_score" />
-  .add_systems(Update, player.run_if(
+  .add_systems(EguiPrimaryContextPass, display_score) //<callout id="first_library_create.pig.call_score" />
+  .add_systems(EguiPrimaryContextPass, player.run_if(
     in_state(GamePhase::Player))) //<callout id="first_library_create.pig.call_player_update" />
   .add_systems(Update, cpu.run_if(
     in_state(GamePhase::Cpu))) //<callout id="first_library_create.pig.call_cpu_update" />
@@ -72,12 +72,13 @@ fn setup(
 fn display_score(
   scores: Res<Scores>,
   mut egui_context: EguiContexts, //<callout id="first_library_create.pig.egui_ctx" />
-) {
-  egui::Window::new("Total Scores").show(egui_context.ctx_mut(), |ui| {
+) -> Result {
+  egui::Window::new("Total Scores").show(egui_context.ctx_mut()?, |ui| {
     //<callout id="first_library_create.pig.egui_window" />
     ui.label(&format!("Player: {}", scores.player)); //<callout id="first_library_create.pig.show_player_score" />
     ui.label(&format!("CPU: {}", scores.cpu));
   });
+  Ok(())
 }
 //END: display_score
 
@@ -128,8 +129,8 @@ fn player(
   mut scores: ResMut<Scores>,
   mut state: ResMut<NextState<GamePhase>>,
   mut egui_context: EguiContexts,
-) {
-  egui::Window::new("Play Options").show(egui_context.ctx_mut(), |ui| {
+) -> Result {
+  egui::Window::new("Play Options").show(egui_context.ctx_mut()?, |ui| {
     let hand_score: usize =
       hand_query.iter().map(|(_, ts)| ts.texture_atlas.as_ref().unwrap().index + 1).sum();//<callout id="first_library_create.pig.hand_score" />
     ui.label(&format!("Score for this hand: {hand_score}"));
@@ -158,6 +159,7 @@ fn player(
       state.set(GamePhase::Cpu);
     }
   });
+  Ok(())
 }
 //END: player
 

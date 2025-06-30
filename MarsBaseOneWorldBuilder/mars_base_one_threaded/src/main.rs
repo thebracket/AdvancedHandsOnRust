@@ -27,7 +27,7 @@ fn main() -> anyhow::Result<()> {
   //START: WorldBuildingPhase
   add_phase!(app, GamePhase, GamePhase::WorldBuilding,
     start => [ spawn_builder ],
-    run => [ show_builder ],
+    run => [ ],
     exit => [ ]
   );
   //END: WorldBuildingPhase
@@ -61,6 +61,7 @@ fn main() -> anyhow::Result<()> {
       )
       .insert_resource(Animations::new())
       .add_event::<OnCollision<Player, Ground>>()
+      .add_systems(EguiPrimaryContextPass, show_builder.run_if(in_state(GamePhase::WorldBuilding)))
       .run();
 
   Ok(())
@@ -72,6 +73,7 @@ static WORLD_READY: AtomicBool = AtomicBool::new(false);
 //START: WorldMutex
 use std::sync::Mutex;
 use bevy::render::camera::ScalingMode;
+use my_library::egui::EguiPrimaryContextPass;
 
 static NEW_WORLD: Mutex<Option<World>> = Mutex::new(None);
 //END: WorldMutex
@@ -106,9 +108,9 @@ fn spawn_builder() {
 fn show_builder(
   mut state: ResMut<NextState<GamePhase>>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   egui::egui::Window::new("Performance").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       ui.label("Building World");
     });
@@ -116,6 +118,7 @@ fn show_builder(
   if WORLD_READY.load(std::sync::atomic::Ordering::Relaxed) {
     state.set(GamePhase::Playing);
   }
+  Ok(())
 }
 //END: WorldBuildingDone
 
