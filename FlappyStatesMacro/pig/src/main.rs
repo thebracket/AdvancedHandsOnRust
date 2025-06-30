@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_egui::{egui, EguiPlugin, EguiContexts};
+use bevy_egui::{egui, EguiPlugin, EguiContexts, EguiPrimaryContextPass};
 use my_library::*;
 
 //START: GamePhase
@@ -33,12 +33,12 @@ fn main() {
   );
 
   add_phase!(app, GamePhase, GamePhase::Player,//<callout id="macro_pig.player" />
-    start => [ ], run => [ player, check_game_over, display_score ]
+    start => [ ], run => [ check_game_over ]
       ,exit => [ ]
   );
 
   add_phase!(app, GamePhase, GamePhase::Cpu,//<callout id="macro_pig.cpu" />
-    start => [ ], run => [ cpu, check_game_over, display_score ]
+    start => [ ], run => [ cpu, check_game_over ]
       , exit => [ ]
   );
 
@@ -61,8 +61,10 @@ fn main() {
   }))
   .add_plugins(GameStatePlugin::new(GamePhase::MainMenu, GamePhase::Start, 
     GamePhase::GameOver))
-  .add_plugins(EguiPlugin{ enable_multipass_for_primary_context: false })
+  .add_plugins(EguiPlugin::default())
   .add_plugins(RandomPlugin)
+  .add_systems(EguiPrimaryContextPass, player.run_if(in_state(GamePhase::Player)))
+  .add_systems(EguiPrimaryContextPass, display_score.run_if(in_state(GamePhase::Player).or(in_state(GamePhase::Cpu))))
   .run();
 }
 //END: main
@@ -111,11 +113,12 @@ fn setup(
 fn display_score(
   scores: Res<Scores>,
   mut egui_context: EguiContexts,
-) {
-  egui::Window::new("Total Scores").show(egui_context.ctx_mut(), |ui| {
+) -> Result {
+  egui::Window::new("Total Scores").show(egui_context.ctx_mut()?, |ui| {
     ui.label(&format!("Player: {}", scores.player));
     ui.label(&format!("CPU: {}", scores.cpu));
   });
+  Ok(())
 }
 
 fn clear_die(
@@ -164,8 +167,8 @@ fn player(
   mut scores: ResMut<Scores>,
   mut state: ResMut<NextState<GamePhase>>,
   mut egui_context: EguiContexts,
-) {
-  egui::Window::new("Play Options").show(egui_context.ctx_mut(), |ui| {
+) -> Result {
+  egui::Window::new("Play Options").show(egui_context.ctx_mut()?, |ui| {
     let hand_score: usize =
       hand_query.iter().map(|(_, ts)| ts.texture_atlas.as_ref().unwrap().index + 1).sum();
     ui.label(&format!("Score for this hand: {}", hand_score));
@@ -194,6 +197,7 @@ fn player(
       state.set(GamePhase::Cpu);
     }
   });
+  Ok(())
 }
 
 fn cpu(
@@ -266,8 +270,8 @@ fn end_game(
 fn display_final_score(
   scores: Res<FinalScore>,
   mut egui_context: EguiContexts,
-) {
-  egui::Window::new("Total Scores").show(egui_context.ctx_mut(), |ui| {
+) -> Result {
+  egui::Window::new("Total Scores").show(egui_context.ctx_mut()?, |ui| {
     ui.label(&format!("Player: {}", scores.0.player));
     ui.label(&format!("CPU: {}", scores.0.cpu));
     if scores.0.player < scores.0.cpu {
@@ -276,5 +280,6 @@ fn display_final_score(
       ui.label("Player is the winnner!");
     }
   });
+  Ok(())
 }
 //END: FinalScore

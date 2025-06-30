@@ -40,7 +40,7 @@ pub(crate) fn run<T>(
     mut texture_atlases: ResMut<Assets<TextureAtlasLayout>>,
     loaded_assets: Res<LoadedAssets>,
     // END_HIGHLIGHT
-) where T: States+FromWorld+FreelyMutableState,
+) -> Result where T: States+FromWorld+FreelyMutableState,
 {
     to_load.0.retain(|handle| {
         match asset_server.get_load_state(handle.id()) {
@@ -57,11 +57,12 @@ pub(crate) fn run<T>(
     }
     //END: finished_loading
     Window::new("Loading, Please Wait").show(
-        egui_context.ctx_mut(), |ui| {
+        egui_context.ctx_mut()?, |ui| {
             ui.label(
                 format!("{} assets remaining", to_load.0.len())
             )
         });
+    Ok(())
 }
 
 //START: load_atlases

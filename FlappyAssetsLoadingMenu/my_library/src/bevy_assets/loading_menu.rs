@@ -36,7 +36,7 @@ pub(crate) fn run<T>(
     mut state: ResMut<NextState<T>>,
     mut egui_context: EguiContexts,
     menu_info: Res<MenuResource<T>>,
-) where T: States+FromWorld+FreelyMutableState,
+) -> Result where T: States+FromWorld+FreelyMutableState,
 {
     to_load.0.retain(|handle| {//<callout id="loading_menu.retain" />
         match asset_server.get_load_state(handle.id()) {//<callout id="loading_menu.get_load_state" />
@@ -48,11 +48,12 @@ pub(crate) fn run<T>(
         state.set(menu_info.menu_state.clone());
     }
     Window::new("Loading, Please Wait").show(//<callout id="loading_menu.inform" />
-        egui_context.ctx_mut(), |ui| {
+        egui_context.ctx_mut()?, |ui| {
             ui.label(
                 format!("{} assets remaining", to_load.0.len())
             )
       });
+    Ok(())
 }
 //END: run
 

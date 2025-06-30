@@ -62,11 +62,11 @@ fn main() -> anyhow::Result<()> {
   app.add_event::<FinalScore>();
   //END: RegisterFinalScore
   //START: FinalScorePhase
-  app.add_systems(Update, final_score.run_if(in_state(GamePhase::GameOver)));
+  app.add_systems(EguiPrimaryContextPass, final_score.run_if(in_state(GamePhase::GameOver)));
   //END: FinalScorePhase
 
   //START: HighScorePhase
-  app.add_systems(Update, highscore_table.run_if(in_state(GamePhase::MainMenu)));
+  app.add_systems(EguiPrimaryContextPass, highscore_table.run_if(in_state(GamePhase::MainMenu)));
   //END: HighScorePhase
 
   app.add_event::<Impulse>();
@@ -104,6 +104,8 @@ fn main() -> anyhow::Result<()> {
       .add_event::<OnCollision<Player, Fuel>>()
       .add_event::<OnCollision<Player, Battery>>()
       .add_event::<SpawnParticle>()
+      .add_systems(EguiPrimaryContextPass, show_builder.run_if(in_state(GamePhase::WorldBuilding)))
+      .add_systems(EguiPrimaryContextPass, (score_display, show_performance).run_if(in_state(GamePhase::Playing)))
       .run();
 
   Ok(())
@@ -113,6 +115,7 @@ static WORLD_READY: AtomicBool = AtomicBool::new(false);
 use std::sync::Mutex;
 use bevy::asset::RenderAssetUsages;
 use bevy::render::camera::ScalingMode;
+use my_library::egui::EguiPrimaryContextPass;
 
 static NEW_WORLD: Mutex<Option<World>> = Mutex::new(None);
 
@@ -146,9 +149,9 @@ fn spawn_builder() {
 fn show_builder(
   mut state: ResMut<NextState<GamePhase>>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   egui::egui::Window::new("Performance").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       ui.label("Building World");
     });
@@ -156,6 +159,7 @@ fn show_builder(
   if WORLD_READY.load(std::sync::atomic::Ordering::Relaxed) {
     state.set(GamePhase::Playing);
   }
+  Ok(())
 }
 //END: WorldBuildingDone
 
@@ -661,13 +665,13 @@ impl World {
 fn show_performance(
   diagnostics: Res<DiagnosticsStore>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   let fps = diagnostics
       .get(&FrameTimeDiagnosticsPlugin::FPS)
       .and_then(|fps| fps.average())
       .unwrap_or(0.0);
   egui::egui::Window::new("Performance").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       let fps_text = format!("FPS: {fps:.1}");
       let color = match fps as u32 {
@@ -677,6 +681,7 @@ fn show_performance(
       };
       ui.colored_label(color, &fps_text);
     });
+  Ok(())
 }
 
 #[derive(Component)]
@@ -847,12 +852,12 @@ fn miner_beacon(
 fn score_display(
   player: Query<&Player>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   let Ok(player) = player.single() else {
-    return;
+    return Ok(());
   };
   egui::egui::Window::new("Score").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       //START_HIGHLIGHT
       ui.label(format!("Score: {}", player.score));
@@ -861,6 +866,7 @@ fn score_display(
       ui.label(format!("Shields: {}", player.shields));
       ui.label(format!("Fuel: {}", player.fuel));
     });
+  Ok(())
 }
 //END: DisplayScore
 
@@ -925,7 +931,7 @@ fn final_score(
   mut final_score: EventReader<FinalScore>,
   mut state: Local<ScoreState>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   // Receive any score messages
   for score in final_score.read() {
     state.score = Some(score.0);
@@ -933,12 +939,12 @@ fn final_score(
 
   // Display the score input
   if state.submitted {
-    return;
+    return Ok(());
   }
   //START: SubmitScoreToServer
   if let Some(score) = state.score {
     egui::egui::Window::new("Final Score").show(
-      egui_context.ctx_mut(),
+      egui_context.ctx_mut()?,
       |ui| {
         ui.label(format!("Final Score: {}", score));
         ui.label("Please enter your name:");
@@ -960,6 +966,7 @@ fn final_score(
     );
   }
   //END: SubmitScoreToServer
+  Ok(())
 }
 
 //START: HighScoreTableState
@@ -979,7 +986,7 @@ struct HighScoreTable {
 fn highscore_table(
   mut state: Local<HighscoreTableState>,// <callout id="mbo_highscore_local_state" />
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   if state.receiver.is_none() {
     // Create the channel
     let (tx, rx) = std::sync::mpsc::channel();// <callout id="mbo_highscore_channel" />
@@ -1006,7 +1013,7 @@ fn highscore_table(
   if let Some(table) = &state.entries {
     // Display the table
     egui::egui::Window::new("High Scores").show(// <callout id="mbo_highscore_hsrender" />
-      egui_context.ctx_mut(),
+      egui_context.ctx_mut()?,
       |ui| {
         for entry in table.entries.iter() {
           ui.label(format!("{}: {}", entry.name, entry.score));
@@ -1014,5 +1021,6 @@ fn highscore_table(
       });
     }
   }
+  Ok(())
 }
 //END: HighScoreTableState2

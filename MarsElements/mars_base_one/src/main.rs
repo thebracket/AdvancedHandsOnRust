@@ -31,7 +31,7 @@ fn main() -> anyhow::Result<()> {
   let mut app = App::new();
   add_phase!(app, GamePhase, GamePhase::WorldBuilding,
     start => [ spawn_builder ],
-    run => [ show_builder ],
+    run => [ ],
     exit => [ ]
   );
   //START: FinalizeSystems
@@ -41,9 +41,9 @@ fn main() -> anyhow::Result<()> {
         apply_velocity,
       terminal_velocity, check_collisions::<Player, Ground>, bounce, 
         camera_follow,
-      show_performance, spawn_particle_system, particle_age_system,
+      spawn_particle_system, particle_age_system,
       miner_beacon,
-      score_display, check_collisions::<Player, Miner>,
+      check_collisions::<Player, Miner>,
       check_collisions::<Player, Fuel>, check_collisions::<Player, Battery>,
       collect_game_element_and_despawn::<Miner, { BurstColor::Green as u8 }>,
       collect_game_element_and_despawn::<Fuel, { BurstColor::Orange as u8 }>,
@@ -93,6 +93,8 @@ fn main() -> anyhow::Result<()> {
       .add_event::<OnCollision<Player, Fuel>>()
       .add_event::<OnCollision<Player, Battery>>()
       .add_event::<SpawnParticle>()
+      .add_systems(EguiPrimaryContextPass, show_builder.run_if(in_state(GamePhase::WorldBuilding)))
+      .add_systems(EguiPrimaryContextPass, (score_display, show_performance).run_if(in_state(GamePhase::Playing)))
       .run();
 
   Ok(())
@@ -102,6 +104,7 @@ static WORLD_READY: AtomicBool = AtomicBool::new(false);
 use std::sync::Mutex;
 use bevy::asset::RenderAssetUsages;
 use bevy::render::camera::ScalingMode;
+use my_library::egui::EguiPrimaryContextPass;
 
 static NEW_WORLD: Mutex<Option<World>> = Mutex::new(None);
 
@@ -139,9 +142,9 @@ fn spawn_builder() {
 fn show_builder(
   mut state: ResMut<NextState<GamePhase>>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   egui::egui::Window::new("Performance").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       ui.label("Building World");
     });
@@ -149,6 +152,7 @@ fn show_builder(
   if WORLD_READY.load(std::sync::atomic::Ordering::Relaxed) {
     state.set(GamePhase::Playing);
   }
+  Ok(())
 }
 //END: WorldBuildingDone
 
@@ -687,13 +691,13 @@ impl World {
 fn show_performance(
   diagnostics: Res<DiagnosticsStore>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   let fps = diagnostics
       .get(&FrameTimeDiagnosticsPlugin::FPS)
       .and_then(|fps| fps.average())
       .unwrap_or(0.0);
   egui::egui::Window::new("Performance").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       let fps_text = format!("FPS: {fps:.1}");
       let color = match fps as u32 {
@@ -703,6 +707,7 @@ fn show_performance(
       };
       ui.colored_label(color, &fps_text);
     });
+  Ok(())
 }
 //END: ShowFPS
 
@@ -886,17 +891,18 @@ fn miner_beacon(
 fn score_display(
   player: Query<&Player>,
   mut egui_context: egui::EguiContexts,
-) {
+) -> Result {
   let Ok(player) = player.single() else {
-    return;
+    return Ok(());
   };
   egui::egui::Window::new("Score").show(
-    egui_context.ctx_mut(),
+    egui_context.ctx_mut()?,
     |ui| {
       ui.label(format!("Miners Saved: {}", player.miners_saved));
       ui.label(format!("Shields: {}", player.shields));
       ui.label(format!("Fuel: {}", player.fuel));
     });
+  Ok(())
 }
 //END: ScoreDisplay
 

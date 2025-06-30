@@ -61,7 +61,7 @@ members = [
 
 [workspace.dependencies]
 bevy = "0.16.0"
-bevy_egui = "0.34.1"
+bevy_egui = "0.35.0"
 anyhow = "1"
 rand = "0.8"
 rand_pcg = { version = "0.3" }
