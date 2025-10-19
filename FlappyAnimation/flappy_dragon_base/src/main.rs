@@ -73,7 +73,8 @@ fn main() -> anyhow::Result<()> {
         .with_animation("Straight and Level", PerFrameAnimation::new(
           vec![
             AnimationFrame::new(2, 500, vec![AnimationOption::NextFrame]),
-            AnimationFrame::new(3, 500, vec![AnimationOption::GoToFrame(0)]),
+            AnimationFrame::new(3, 500, vec![
+              AnimationOption::GoToFrame(0)]),
           ]
         ))
         //END: Animation1

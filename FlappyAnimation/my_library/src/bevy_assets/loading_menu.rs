@@ -63,6 +63,7 @@ pub(crate) fn run<T>(
             )
       });
 }
+//END: run
 
 //START: load_atlases
 fn load_atlases(
@@ -84,7 +85,6 @@ fn load_atlases(
     }
 }
 //END: load_atlases
-//END: run
 
 //START: end
 pub(crate) fn exit(

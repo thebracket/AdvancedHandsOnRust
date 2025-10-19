@@ -38,9 +38,9 @@ fn main() -> anyhow::Result<()> {
   add_phase!(app, GamePhase, GamePhase::Playing,
     start => [ setup ],
     run => [ movement, end_game, physics_clock, sum_impulses, apply_gravity, 
-        apply_velocity,
-      terminal_velocity, check_collisions::<Player, Ground>, bounce, 
-        camera_follow,
+        apply_velocity,terminal_velocity.after(apply_velocity), 
+        check_collisions::<Player, Ground>, bounce, 
+        camera_follow.after(terminal_velocity),
       show_performance, spawn_particle_system, particle_age_system,
       miner_beacon,
       score_display, check_collisions::<Player, Miner>,
@@ -238,33 +238,31 @@ fn movement(
   if keyboard.pressed(KeyCode::ArrowLeft) {
     transform.rotate(Quat::from_rotation_z(f32::to_radians(2.0)));
 
-    //START_HIGHLIGHT
     particles.write(SpawnParticle{
       position: -transform.local_x().truncate() + Vec2::new(
         transform.translation.x, transform.translation.y),
       color: LinearRgba::new(0.0, 1.0, 1.0, 1.0),
       velocity: transform.local_x().as_vec3(),
     });
-    //END_HIGHLIGHT
   }
   if keyboard.pressed(KeyCode::ArrowRight) {
     transform.rotate(Quat::from_rotation_z(f32::to_radians(-2.0)));
 
-    //START_HIGHLIGHT
     particles.write(SpawnParticle{
       position: transform.local_x().truncate() + Vec2::new(
         transform.translation.x, transform.translation.y),
       color: LinearRgba::new(0.0, 1.0, 1.0, 1.0),
       velocity: -transform.local_x().as_vec3(),
     });
-    //END_HIGHLIGHT
   }
   if keyboard.pressed(KeyCode::ArrowUp) {
+    // START_HIGHLIGHT
     if player.fuel > 0 {
       impulses.write(Impulse {
         target: entity,
         amount: transform.local_y().as_vec3(),
         absolute: false,
+        source: 1,
       });
       particles.write(SpawnParticle{
         position: transform.local_y().truncate() + Vec2::new(
@@ -274,6 +272,7 @@ fn movement(
       });
       player.fuel -= 1;
     }
+    //END_HIGHLIGHT
   }
 }
 //END: Movement
@@ -345,8 +344,10 @@ fn bounce(
     bounce = bounce.normalize();
     impulses.write(Impulse {
       target: entity.unwrap(),
-      amount: Vec3::new(bounce.x / bounces as f32, bounce.y / bounces as f32, 0.0),
+      amount: Vec3::new(bounce.x / bounces as f32, 
+        bounce.y / bounces as f32, 0.0),
       absolute: true,
+      source: 2,
     });
 
     // Spawn a burst of particles
@@ -437,6 +438,7 @@ impl World {
     }
   }
 
+  // START: WorldNewSpawnPos
   fn new(width: usize, height: usize, rng: &mut RandomNumberGenerator) -> Self {
     let mut result = Self {
       width,
@@ -444,8 +446,11 @@ impl World {
       solid: vec![true; width * height],
       mesh: None,
       tile_positions: Vec::new(),
+      // START_HIGHLIGHT
       spawn_positions: Vec::new(),
+      // END_HIGHLIGHT
     };
+    // END: WorldNewSpawnPos
 
     // Set the center tile and surrounding tiles to be empty
     result.clear_tiles(width / 2, height / 2);

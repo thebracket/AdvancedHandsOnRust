@@ -75,7 +75,7 @@ impl Rect2D {
         Vec2::new(self.max.x, center.y),
       ), // Top-Right
       Self::new(
-        Vec2::new(self.min.x, center.x),
+        Vec2::new(self.min.x, center.y),
         Vec2::new(center.x, self.max.y),
       ), // Bottom-left
       Self::new(center, self.max), // Bottom-right
@@ -368,6 +368,7 @@ fn bounce_on_collision(
     target: entity,
     amount: a_to_b / 8.0,
     absolute: false,
+    source: 0,
   });
 }
 

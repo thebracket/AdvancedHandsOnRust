@@ -23,10 +23,14 @@ pub(crate) fn setup<T>(// <callout id="flappy_menu.menu_setup" />
     game_over: asset_server.load("game_over.png"),
   };
   let current_state = state.get();
-  let menu_graphic = match current_state {
-    current_state if menu_resource.menu_state == *current_state => menu_assets.main_menu.clone(),
-    current_state if menu_resource.game_end_state == *current_state => menu_assets.game_over.clone(),
-    _ => panic!("Unknown menu state"),
+  let menu_graphic = {
+    if menu_resource.menu_state == *current_state {
+      menu_assets.main_menu.clone()
+    } else if menu_resource.game_end_state == *current_state {
+      menu_assets.game_over.clone()
+    } else {
+      panic!("Unknown menu state")
+    }
   };
 
   commands

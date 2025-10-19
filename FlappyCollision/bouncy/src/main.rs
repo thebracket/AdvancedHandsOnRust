@@ -193,6 +193,7 @@ fn bounce_on_collision(
     target: entity,
     amount: a_to_b / 8.0,//<callout id="bouncy.div_dist" />
     absolute: false,
+    source: 0,
   });
 }
 //END: bounce_on_collision

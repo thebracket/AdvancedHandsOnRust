@@ -30,7 +30,7 @@ pub fn physics_clock(
 
 //START: Velocity
 #[derive(Component)]
-pub struct Velocity(Vec3);
+pub struct Velocity(pub Vec3);
 
 impl Default for Velocity {
   fn default() -> Self {
@@ -51,6 +51,7 @@ pub struct Impulse {
   pub target: Entity,// <callout id="physics_impulse_target" />
   pub amount: Vec3,// <callout id="physics_impulse_amount" />
   pub absolute: bool,// <callout id="physics_impulse_absolute" />
+  pub source: i32,// <callout id="physics_impulse_source" />
 }
 //END: Impulse
 
@@ -59,11 +60,20 @@ pub fn sum_impulses(
   mut impulses: EventReader<Impulse>,// <callout id="physics_sum_eventreader" />
   mut velocities: Query<&mut Velocity>,// <callout id="physics_sum_query" />
 ) {
+  let mut dedupe_by_source = std::collections::HashMap::new(); // <callout id="physics_sum_dedupe" />
   for impulse in impulses.read() {
+    dedupe_by_source.insert(impulse.source, impulse);
+  }
+
+  let mut absolute = std::collections::HashSet::new();// <callout id="physics_sum_absolute" />
+  for (_, impulse) in dedupe_by_source {
     if let Ok(mut velocity) = velocities.get_mut(impulse.target) {// <callout id="physics_sum_get_mut" />
+      if absolute.contains(&impulse.target) {
+        continue; // <callout id="physics_sum_stop" />
+      }
       if impulse.absolute {
         velocity.0 = impulse.amount;
-        return;// <callout id="physics_sum_stop" />
+        absolute.insert(impulse.target);// <callout id="physics_sum_absolute_insert" />
       } else {
         velocity.0 += impulse.amount;
       }

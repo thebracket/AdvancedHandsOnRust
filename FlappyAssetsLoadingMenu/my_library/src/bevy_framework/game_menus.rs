@@ -25,14 +25,14 @@ pub(crate) fn setup<T>(
 {
   let current_state = state.get();
   //START_HIGHLIGHT
-  let menu_graphic = match current_state {
-    current_state 
-      if menu_resource.menu_state == *current_state => 
-        assets.get_handle("main_menu", &loaded_assets).unwrap(),
-    current_state 
-      if menu_resource.game_end_state == *current_state => 
-        assets.get_handle("game_over", &loaded_assets).unwrap(),
-    _ => panic!("Unknown menu state"),
+  let menu_graphic = {
+    if menu_resource.menu_state == *current_state {
+      assets.get_handle("main_menu", &loaded_assets).unwrap()
+    } else if menu_resource.game_end_state == *current_state {
+      assets.get_handle("game_over", &loaded_assets).unwrap()
+    } else {
+      panic!("Unknown menu state")
+    }
   };
   //END_HIGHLIGHT
 

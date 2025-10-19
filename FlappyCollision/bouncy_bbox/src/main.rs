@@ -224,6 +224,7 @@ fn bounce_on_collision(
     target: entity,
     amount: a_to_b / 8.0,
     absolute: false,
+    source: 0,
   });
 }
 

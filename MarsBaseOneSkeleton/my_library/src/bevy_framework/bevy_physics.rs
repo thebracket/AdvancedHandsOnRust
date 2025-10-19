@@ -84,16 +84,26 @@ pub struct Impulse {
   pub target: Entity,
   pub amount: Vec3,
   pub absolute: bool,
+  pub source: i32,
 }
 
 pub fn sum_impulses(
   mut impulses: EventReader<Impulse>,
   mut velocities: Query<&mut Velocity>,
 ) {
+  let mut dedupe_by_source = std::collections::HashMap::new();
   for impulse in impulses.read() {
+    dedupe_by_source.insert(impulse.source, impulse);
+  }
+  let mut absolute = std::collections::HashSet::new();
+  for (_, impulse) in dedupe_by_source {
     if let Ok(mut velocity) = velocities.get_mut(impulse.target) {
+      if absolute.contains(&impulse.target) {
+        continue;
+      }
       if impulse.absolute {
         velocity.0 = impulse.amount;
+        absolute.insert(impulse.target);
       } else {
         velocity.0 += impulse.amount;
       }

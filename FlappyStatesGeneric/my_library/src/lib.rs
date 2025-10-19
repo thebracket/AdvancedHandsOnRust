@@ -9,7 +9,7 @@
 //! 
 //! ## Feature Flags
 //! 
-//! The following feature flags are supported.
+//! The following feature flags are supported: `xorshift`, `pcg`, `locking`.
 //! 
 //! ### Random Number Generation
 //! 
@@ -35,9 +35,7 @@ pub use random_locking::*;
 
 /// [`RandomNumberGenerator`] wraps the `rand` crate. The `rand` crate
 /// is re-exported for your convenience.
-pub mod rand {
-    pub use rand::*;
-}
+pub use rand;
 
 mod bevy_framework;
 pub use bevy_framework::*;

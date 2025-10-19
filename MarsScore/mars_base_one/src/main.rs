@@ -41,8 +41,9 @@ fn main() -> anyhow::Result<()> {
   add_phase!(app, GamePhase, GamePhase::Playing,
     start => [ setup ],
     run => [ movement, end_game, physics_clock, sum_impulses, apply_gravity, 
-      apply_velocity, terminal_velocity, 
-      check_collisions::<Player, Ground>, bounce, camera_follow,
+      apply_velocity, terminal_velocity.after(apply_velocity), 
+      check_collisions::<Player, Ground>, bounce, 
+      camera_follow.after(terminal_velocity),
       show_performance, spawn_particle_system, particle_age_system,
       miner_beacon,
       score_display, check_collisions::<Player, Miner>,
@@ -53,7 +54,7 @@ fn main() -> anyhow::Result<()> {
         { BurstColor::Magenta as u8 }>
       ],
       //START_HIGHLIGHT
-    exit => [ submit_score, cleanup::<GameElement> ]
+    exit => [ submit_score, cleanup::<GameElement>.after(submit_score) ]
       //END_HIGHLIGHT
   );
   //END: ExitPhase
@@ -265,6 +266,7 @@ fn movement(
         target: entity,
         amount: transform.local_y().as_vec3(),
         absolute: false,
+        source: 1,
       });
       particles.write(SpawnParticle{
         position: transform.local_y().truncate() + Vec2::new(
@@ -343,6 +345,7 @@ fn bounce(
       target: entity.unwrap(),
       amount: Vec3::new(bounce.x / bounces as f32, bounce.y / bounces as f32, 0.0),
       absolute: true,
+      source: 2,
     });
 
     // Spawn a burst of particles
@@ -744,7 +747,7 @@ impl OnCollect for Miner {
     if player.shields > 0 {//<callout id="mars.scorepoint.shield_score" />
       player.score += player.shields as u32;
     }
-    if player.fuel > 0 {//<callout id="mars.scorepoint.fuel_score" />
+    if player.fuel > 1000 {//<callout id="mars.scorepoint.fuel_score" />
       player.score += player.fuel as u32;
     }
   }

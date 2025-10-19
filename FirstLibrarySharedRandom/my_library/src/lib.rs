@@ -10,6 +10,4 @@ mod random_locking;
 pub use random_locking::*;
 //END: import
 
-pub mod rand {
-    pub use rand::*;
-}
+pub use rand;
