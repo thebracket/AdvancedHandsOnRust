@@ -239,6 +239,7 @@ fn flap(
           z: 0.0,
         },
         absolute: false,
+        source: 0,
       });
       animation.switch("Flapping");
     }

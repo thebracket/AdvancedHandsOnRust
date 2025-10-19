@@ -28,7 +28,8 @@ where
   fn build(&self, app: &mut App) {
     app.init_state::<T>();    
     //START_HIGHLIGHT
-    app.add_plugins(bevy_egui::EguiPlugin{ enable_multipass_for_primary_context: false });
+    app.add_plugins(bevy_egui::EguiPlugin{ 
+      enable_multipass_for_primary_context: false });
     //END_HIGHLIGHT
     let start = MenuResource {
       menu_state: self.menu_state,

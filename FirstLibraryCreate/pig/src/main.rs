@@ -27,7 +27,7 @@ fn main() {
 
 //START: components
 #[derive(Resource)]
-struct GameAssets {
+struct GameAssets {//<callout id="first_library_create.pig.assets" />
   image: Handle<Image>,
   layout: Handle<TextureAtlasLayout>,
 }
@@ -57,7 +57,8 @@ fn setup(
   commands.spawn(Camera2d::default()); //<callout id="first_library_create.pig.2d_camera" />
 
   let texture = asset_server.load("dice.png");//<callout id="first_library_create.pig.load_image" />
-  let layout = TextureAtlasLayout::from_grid(UVec2::splat(52), 6, 1, None, None);//<callout id="first_library_create.pig.from_grid" />
+  let layout = TextureAtlasLayout::from_grid(
+    UVec2::splat(52), 6, 1, None, None);//<callout id="first_library_create.pig.from_grid" />
   let texture_atlas_layout = texture_atlas_layouts.add(layout);//<callout id="first_library_create.pig.atlas_layout" />
 
   commands.insert_resource(

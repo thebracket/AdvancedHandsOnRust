@@ -50,14 +50,16 @@ fn main() -> anyhow::Result<()> {
       GamePhase::Flapping, 
       GamePhase::GameOver)
     )
+    //START: loading_state
     //START_HIGHLIGHT
     .add_plugins(AssetManager::new()
       .add_image("dragon", "flappy_dragon.png")?
       .add_image("wall", "wall.png")?
       .add_sound("flap", "dragonflap.ogg")?
       .add_sound("crash", "crash.ogg")?
-    )
+    )    
     //END_HIGHLIGHT
+    //END: loading_state
     .run();
     //END:asset_mgr_plugin_main
 

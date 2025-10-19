@@ -22,7 +22,7 @@ fn main() -> anyhow::Result<()> {
   add_phase!(app, GamePhase, GamePhase::Playing,
     start => [ setup ],
     run => [ movement, end_game, physics_clock, sum_impulses, apply_gravity, apply_velocity,
-      terminal_velocity ],
+      terminal_velocity.after(apply_velocity) ],
     exit => [ cleanup::<GameElement> ]
   );
   //END: systems
@@ -104,6 +104,7 @@ fn movement(
       target: entity,
       amount: transform.local_y().as_vec3(),// <callout id="mb1.transform" />
       absolute: false,
+      source: 1,
     });
   }
 }

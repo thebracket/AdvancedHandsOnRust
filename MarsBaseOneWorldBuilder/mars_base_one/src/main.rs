@@ -22,7 +22,8 @@ fn main() -> anyhow::Result<()> {
   add_phase!(app, GamePhase, GamePhase::Playing,
     start => [ setup ],
     run => [ movement, end_game, physics_clock, sum_impulses, apply_gravity, apply_velocity,
-      terminal_velocity, check_collisions::<Player, Ground>, bounce, camera_follow ],
+      terminal_velocity.after(apply_velocity), check_collisions::<Player, Ground>, bounce, 
+      camera_follow.after(terminal_velocity) ],
     exit => [ cleanup::<GameElement> ]
   );
 
@@ -61,8 +62,8 @@ fn setup(
   loaded_assets: Res<LoadedAssets>,
   mut rng: ResMut<RandomNumberGenerator>,
 ) {
-  let cb = Camera2d::default();
-  let projection = Projection::Orthographic(OrthographicProjection {
+  let cb = Camera2d::default();// <callout id="mb1wb0.camera_bundle" />
+  let projection = Projection::Orthographic(OrthographicProjection {// <callout id="mb1wb0.camera_scale" />
     scaling_mode: ScalingMode::WindowSize,
     scale: 0.5,
     ..OrthographicProjection::default_2d()
@@ -79,13 +80,13 @@ fn setup(
     commands,
     "ship",
     0.0,
-    200.0,
+    0.0,
     1.0,
     &loaded_assets,
     GameElement,
     Player,
     Velocity::default(),
-    PhysicsPosition::new(Vec2::new(0.0, 200.0))//,
+    PhysicsPosition::new(Vec2::new(0.0, 0.0))//,
     //ApplyGravity(0.2),
     //AxisAlignedBoundingBox::new(24.0, 24.0)
   );
@@ -114,6 +115,7 @@ fn movement(
       target: entity,
       amount: transform.local_y().as_vec3(),// <callout id="mb1.transform" />
       absolute: false,
+      source: 1,
     });
   }
 }
@@ -192,6 +194,7 @@ fn bounce(
         0.0
       ),
       absolute: true,
+      source: 2,
     });
   }
 }

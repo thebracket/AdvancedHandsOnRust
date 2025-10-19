@@ -1,5 +1,6 @@
 //START: asset_store_use
-use bevy::{asset::{Asset, LoadedUntypedAsset}, prelude::*, platform::collections::HashMap};
+use bevy::{asset::{Asset, LoadedUntypedAsset}, prelude::*, 
+  platform::collections::HashMap};
 //END: asset_store_use
 
 //START: asset_store_types
@@ -8,7 +9,7 @@ pub type AssetResource<'w> = Res<'w, LoadedAssets>;
 //END: asset_store_types
 
 //START: asset_store_struct
-#[derive(Resource)]//<callout id="asset_store_resource" />
+#[derive(Resource, Clone)]//<callout id="asset_store_resource" />
 pub struct AssetStore {
   pub(crate) asset_index: HashMap<String, Handle<LoadedUntypedAsset>>,//<callout id="asset_store_handle_untyped" />
 }

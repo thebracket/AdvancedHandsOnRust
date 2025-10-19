@@ -147,7 +147,8 @@ macro_rules! spawn_animated_sprite {
    ($assets:expr, $commands:expr, $index:expr, $x:expr, $y:expr, $z:expr,
       $animation_name:expr, $($component:expr),*) => 
   {
-      let Some((img, atlas)) = $assets.get_atlas_handle($index) else { panic!() };
+      let Some((img, atlas)) = $assets.get_atlas_handle($index) 
+        else { panic!() };
       $commands.spawn((
          Sprite::from_atlas_image(img.clone(), TextureAtlas {
              layout: atlas.clone(),

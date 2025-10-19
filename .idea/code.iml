@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="EMPTY_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/BootstrapBevy/blank_window/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/BootstrapBevy/moving_dragon/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/BootstrapRust/hello_world/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryBenchmark/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryBenchmark/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryCreate/default_lib/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryCreate/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryCreate/pig/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryDocs/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryDocs/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryDocs/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryGenericRange/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryGenericRange/pig/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryGenericType/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryGenericType/pig/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryMutableRandom/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryMutableRandom/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryMutableRandomPlugin/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryMutableRandomPlugin/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibraryMutableRandomPlugin/pig/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibrarySharedRandom/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibrarySharedRandom/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibrarySubstitute/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FirstLibrarySubstitute/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAnimation/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAnimation/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAnimation/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAnimation/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAssets/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAssets/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAssets/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAssets/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAssetsLoadingMenu/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAssetsLoadingMenu/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAssetsLoadingMenu/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyAssetsLoadingMenu/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyCollision/bouncy/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyCollision/bouncy_bbox/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyCollision/bouncy_bbox_quadtree/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyCollision/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyCollision/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyCollision/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyCollision/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyIntro/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyPhysics/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyPhysics/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyPhysics/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyPhysics/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesGeneric/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesGeneric/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesGeneric/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesGeneric/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesMacro/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesMacro/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesMacro/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesMacro/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesMacro/pig/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesMenu/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesMenu/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesMenu/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyStatesMenu/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyWrap/flappy_dragon_base/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyWrap/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyWrap/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FlappyWrap/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsBaseOneSkeleton/mars_base_one/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsBaseOneSkeleton/my_library/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsBaseOneSkeleton/my_library/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsBaseOneSkeleton/my_library/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsBaseOneSkeleton/mars_base_zero/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsBaseOneWorldBuilder/mars_base_one/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsBaseOneWorldBuilder/mars_base_one_threaded/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsBaseOneOptimize/mars_base_one/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsBaseOneOptimize/mars_base_one_collision/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsElements/mars_base_one/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsScore/mars_base_one/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MarsScore/highscore_server/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

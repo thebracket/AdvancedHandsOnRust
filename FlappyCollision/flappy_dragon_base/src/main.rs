@@ -228,6 +228,8 @@ fn flap(
         target: flappy,
         amount: Vec3::new(0.0, 0.5, 0.0),
         absolute: false,
+        source: 1,
+
       });
       //END_HIGHLIGHT
       animation.switch("Flapping");

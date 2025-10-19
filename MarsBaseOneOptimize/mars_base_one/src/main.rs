@@ -33,7 +33,8 @@ fn main() -> anyhow::Result<()> {
   add_phase!(app, GamePhase, GamePhase::Playing,
     start => [ setup ],
     run => [ movement, end_game, physics_clock, sum_impulses, apply_gravity, apply_velocity,
-      terminal_velocity, check_collisions::<Player, Ground>, bounce, camera_follow,
+      terminal_velocity.after(apply_velocity), check_collisions::<Player, Ground>, bounce, 
+      camera_follow.after(terminal_velocity),
       show_performance],
     exit => [ cleanup::<GameElement> ]
   );
@@ -176,6 +177,7 @@ fn movement(
       target: entity,
       amount: transform.local_y() .as_vec3(),// <callout id="mb1.transform" />
       absolute: false,
+      source: 1,
     });
   }
 }
@@ -245,6 +247,7 @@ fn bounce(
       target: entity.unwrap(),
       amount: Vec3::new(bounce.x / bounces as f32, bounce.y / bounces as f32, 0.0),
       absolute: true,
+      source: 2,
     });
   }
 }
@@ -316,14 +319,21 @@ impl World {
     }
   }
 
-  fn new(width: usize, height: usize, rng: &mut RandomNumberGenerator) -> Self {
+  //START: WorldNew
+  fn new(
+    width: usize, height: usize, 
+    rng: &mut RandomNumberGenerator
+  ) -> Self {
     let mut result = Self {
       width,
       height,
       solid: vec![true; width * height],
+      //START_HIGHLIGHT
       mesh: None,
+      //END_HIGHLIGHT
       tile_positions: Vec::new(),
     };
+    //END: WorldNew
 
     // Set the center tile and surrounding tiles to be empty
     result.clear_tiles(width / 2, height / 2);
